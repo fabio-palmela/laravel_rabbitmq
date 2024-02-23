@@ -1,0 +1,68 @@
+FROM php:8.2-fpm
+
+ENV DOCKERIZE_VERSION v0.6.1
+
+RUN apt-get update && \
+    apt-get install -y wget && \
+    wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
+    tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
+    rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
+    apt-get remove -y wget && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && \
+    apt-get install -y \
+        nodejs \
+        npm && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && \
+    apt-get install -y \
+    libzip-dev \
+    zip \
+    unzip \
+    git \
+    libssl-dev \
+    libcurl4-openssl-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-install sockets zip curl ftp pdo_mysql mysqli
+
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+RUN php -r "unlink('composer-setup.php');"
+
+COPY ./analise_risco /var/www/html/analise_risco
+
+WORKDIR /var/www/html/analise_risco
+
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
+RUN npm install
+
+# RUN npm run build
+
+# RUN composer install --no-scripts
+RUN composer install --no-scripts --no-interaction --no-autoloader
+
+RUN composer dump-autoload --optimize
+
+# Configurando o Nginx
+# COPY nginx/default /etc/nginx/sites-available/default
+
+# Expondo a porta 80
+# EXPOSE 80
+
+# Iniciando o Nginx e o PHP-FPM0
+# CMD ["nginx", "-g", "daemon off;"]
+
+# CMD php artisan migrate; php artisan serve --host=0.0.0.0 --port=8181
+# CMD php artisan migrate; php artisan serve --host=0.0.0.0 --port=8181
+CMD dockerize -wait tcp://mysql:3306 -timeout 60s && php artisan migrate --path=/database/migrations/simulador/ && php artisan serve --host=0.0.0.0 --port=8181
+# CMD dockerize -wait tcp://mysql:3307 -timeout 60s && php artisan migrate && php artisan serve --host=0.0.0.0 --port=8181
+
+
+EXPOSE 8181

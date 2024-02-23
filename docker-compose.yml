@@ -1,0 +1,116 @@
+services:
+  calcular-service:
+    build:
+      # context: ./analise_risco
+      dockerfile: ./docker/DockerfileEmail
+    container_name: calcular-service
+    depends_on:
+      - rabbitmq
+    networks:
+      - internal
+    volumes:
+      - ./analise_risco:/var/www/html/analise_risco
+
+  email-service:
+    build:
+      # context: ./analise_risco
+      # dockerfile: DockerfileEmail
+      dockerfile: ./docker/DockerfileEmail
+    container_name: email-service
+    depends_on:
+      - rabbitmq
+    networks:
+      - internal
+    volumes:
+      - ./analise_risco:/var/www/html/analise_risco
+
+  atualiza-margem-service:
+    build:
+      dockerfile: ./docker/DockerfileMargem
+    container_name: atualiza-margem-service
+    depends_on:
+      - rabbitmq
+    networks:
+      - internal
+    volumes:
+      - ./analise_risco:/var/www/html/analise_risco
+
+  # rpa-service:
+  #   build:
+  #     context: ./rpa
+  #   container_name: rpa-service
+  #   depends_on:
+  #     - rabbitmq
+
+  simulador-service:
+    build:
+      dockerfile: ./docker/DockerfileSimulador
+    ports:
+      - "8181:8181"
+    container_name: simulador-service
+    depends_on:
+      - rabbitmq
+      - mysql
+    volumes:
+      - ./analise_risco:/var/www/html/analise_risco
+    networks:
+      - internal
+  # nginx:
+  #   image: nginx:latest
+  #   volumes:
+  #     - ./analise_risco/nginx/default:/etc/nginx/conf.d/default.conf
+  #   ports:
+  #     - "80:80"
+  #   container_name: nginx
+    
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: my-rabbit
+    container_name: rabbitmq_management
+    
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_HOST=/
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - internal
+  
+  # mysql:
+  #   container_name: mysql
+  #   image: mysql:latest
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: simulador
+  #   volumes:
+  #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  #   networks:
+      # - internal
+  
+  mysql:
+    build:
+      context: .
+      dockerfile: ./mysql/Dockerfile
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: simulador
+    container_name: mysql
+    networks:
+      - internal
+    # command: --init-file=/docker-entrypoint-initdb.d/teste.sql
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  internal:
+    driver: bridge
