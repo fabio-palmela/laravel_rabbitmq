@@ -23,6 +23,17 @@ services:
       - internal
     volumes:
       - ./analise_risco:/var/www/html/analise_risco
+  
+  notifica-ente-service:
+    build:
+      dockerfile: ./docker/DockerfileNotificaEnte
+    container_name: notifica-ente-service
+    depends_on:
+      - rabbitmq
+    networks:
+      - internal
+    volumes:
+      - ./analise_risco:/var/www/html/analise_risco
 
   atualiza-margem-service:
     build:
