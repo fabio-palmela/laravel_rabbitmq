@@ -9,9 +9,7 @@ CREATE TABLE `emprestimo_consignado` (
   `valor_credito` double(8,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `simulacao_consignado_cpf_cooperado_unique` (`cpf_cooperado`),
-  UNIQUE KEY `simulacao_consignado_cnpj_ente_consignante_unique` (`cnpj_ente_consignante`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 create database consignado;
@@ -25,7 +23,5 @@ CREATE TABLE `emprestimo_consignado` (
   `valor_credito` double(8,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `simulacao_consignado_cpf_cooperado_unique` (`cpf_cooperado`),
-  UNIQUE KEY `simulacao_consignado_cnpj_ente_consignante_unique` (`cnpj_ente_consignante`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
