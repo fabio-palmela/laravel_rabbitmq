@@ -61,7 +61,7 @@ RUN composer dump-autoload --optimize
 
 # CMD php artisan migrate; php artisan serve --host=0.0.0.0 --port=8181
 # CMD php artisan migrate; php artisan serve --host=0.0.0.0 --port=8181
-CMD dockerize -wait tcp://mysql:3306 -timeout 60s && php artisan migrate --path=/database/migrations/simulador/ && php artisan serve --host=0.0.0.0 --port=8181
+CMD dockerize -wait tcp://mysql:3306 -timeout 60s && php artisan migrate --path=/database/migrations/simulador/ && php artisan serve --host=0.0.0.0 --port=8181 --env=docker
 # CMD dockerize -wait tcp://mysql:3307 -timeout 60s && php artisan migrate && php artisan serve --host=0.0.0.0 --port=8181
 
 

@@ -50,4 +50,4 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # RUN composer install --no-scripts
 
-CMD dockerize -wait tcp://mysql:3306 -timeout 60s && dockerize -wait tcp://rabbitmq:5672 -timeout 60s && php artisan app:calcular
+CMD dockerize -wait tcp://mysql:3306 -timeout 30s && dockerize -wait tcp://rabbitmq:5672 -timeout 30s && php artisan app:calcular --env=docker

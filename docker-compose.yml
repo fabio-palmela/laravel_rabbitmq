@@ -1,20 +1,17 @@
 services:
   calcular-service:
     build:
-      # context: ./analise_risco
-      dockerfile: ./docker/DockerfileEmail
+      dockerfile: ./docker/DockerfileCalcular
     container_name: calcular-service
     depends_on:
       - rabbitmq
     networks:
       - internal
     volumes:
-      - ./analise_risco:/var/www/html/analise_risco
+      - ./simulador-backend:/var/www/html/simulador-backend
 
   email-service:
     build:
-      # context: ./analise_risco
-      # dockerfile: DockerfileEmail
       dockerfile: ./docker/DockerfileEmail
     container_name: email-service
     depends_on:
@@ -22,7 +19,7 @@ services:
     networks:
       - internal
     volumes:
-      - ./analise_risco:/var/www/html/analise_risco
+      - ./simulador-backend:/var/www/html/simulador-backend
   
   notifica-ente-service:
     build:
@@ -33,7 +30,7 @@ services:
     networks:
       - internal
     volumes:
-      - ./analise_risco:/var/www/html/analise_risco
+      - ./simulador-backend:/var/www/html/simulador-backend
 
   atualiza-margem-service:
     build:
@@ -44,14 +41,7 @@ services:
     networks:
       - internal
     volumes:
-      - ./analise_risco:/var/www/html/analise_risco
-
-  # rpa-service:
-  #   build:
-  #     context: ./rpa
-  #   container_name: rpa-service
-  #   depends_on:
-  #     - rabbitmq
+      - ./simulador-backend:/var/www/html/simulador-backend
 
   simulador-service:
     build:
@@ -63,16 +53,9 @@ services:
       - rabbitmq
       - mysql
     volumes:
-      - ./analise_risco:/var/www/html/analise_risco
+      - ./simulador-backend:/var/www/html/simulador-backend
     networks:
       - internal
-  # nginx:
-  #   image: nginx:latest
-  #   volumes:
-  #     - ./analise_risco/nginx/default:/etc/nginx/conf.d/default.conf
-  #   ports:
-  #     - "80:80"
-  #   container_name: nginx
     
   rabbitmq:
     image: rabbitmq:3-management
@@ -91,19 +74,6 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - internal
-  
-  # mysql:
-  #   container_name: mysql
-  #   image: mysql:latest
-  #   ports:
-  #     - "3306:3306"
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: root
-  #     MYSQL_DATABASE: simulador
-  #   volumes:
-  #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-  #   networks:
-      # - internal
   
   mysql:
     build:

@@ -41,4 +41,4 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN composer install --no-scripts
 
 # CMD ["dockerize", "-wait", "tcp://rabbitmq:5672", "--", "php", "artisan", "app:email"]
-CMD dockerize -wait tcp://mysql:3306 -timeout 60s && php artisan migrate --path=/database/migrations/email/ && php artisan app:notificaente
+CMD dockerize -wait tcp://mysql:3306 -timeout 30s && php artisan migrate --path=/database/migrations/email/ && php artisan app:notificaente --env=docker
