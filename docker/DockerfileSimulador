@@ -35,9 +35,9 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 RUN php -r "unlink('composer-setup.php');"
 
-COPY ./analise_risco /var/www/html/analise_risco
+COPY ./simulador-backend /var/www/html/simulador-backend
 
-WORKDIR /var/www/html/analise_risco
+WORKDIR /var/www/html/simulador-backend
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
@@ -59,10 +59,8 @@ RUN composer dump-autoload --optimize
 # Iniciando o Nginx e o PHP-FPM0
 # CMD ["nginx", "-g", "daemon off;"]
 
-# CMD php artisan migrate; php artisan serve --host=0.0.0.0 --port=8181
-# CMD php artisan migrate; php artisan serve --host=0.0.0.0 --port=8181
-CMD dockerize -wait tcp://mysql:3306 -timeout 60s && php artisan migrate --path=/database/migrations/simulador/ && php artisan serve --host=0.0.0.0 --port=8181 --env=docker
-# CMD dockerize -wait tcp://mysql:3307 -timeout 60s && php artisan migrate && php artisan serve --host=0.0.0.0 --port=8181
+# CMD dockerize -wait tcp://mysql:3306 -timeout 60s && php artisan migrate --path=/database/migrations/simulador/ && php artisan serve --host=0.0.0.0 --port=8181 --env=docker
+CMD dockerize -wait tcp://mysql:3306 -timeout 60s && php artisan serve --host=0.0.0.0 --port=8181 --env=docker
 
 
 EXPOSE 8181

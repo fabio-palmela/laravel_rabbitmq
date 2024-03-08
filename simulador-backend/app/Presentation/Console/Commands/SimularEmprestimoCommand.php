@@ -3,9 +3,9 @@
 namespace App\Presentation\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Infra\Broken\SimularQueue;
+use App\Infra\Broken\SimuladorService\SimularQueue;
 use App\Application\UseCases\SimularUseCase;
-use App\Infra\Broken\SimuladorService\EmailEnteConsignanteQueue;
+use App\Infra\Repositories\EmprestimoRepositoryEloquent;
 
 class SimularEmprestimoCommand extends Command
 {
@@ -40,7 +40,7 @@ class SimularEmprestimoCommand extends Command
 
         $simularUseCase = new SimularUseCase(
             new SimularQueue(),
-            new EmailEnteConsignanteQueue()
+            new EmprestimoRepositoryEloquent()
         );
         for($i = 0; $i < $qtde; $i++){
             $simularUseCase->simular($data);

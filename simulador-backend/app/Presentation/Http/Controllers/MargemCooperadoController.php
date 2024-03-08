@@ -18,15 +18,10 @@ class MargemCooperadoController extends Controller
 
     public function atualizar(Request $request){
         $input = $request->input();
-        $data = [
-            'margem_cooperado' => $input['margem_cooperado'],
-            'cpf_cooperado' => $input['cpf_cooperado'],
-            'tipo_credito' => '1'
-        ];
-
+    
         $margemQueue = new AtualizaMargemQueue();
         $atualizarMargemUseCase = new AtualizarMargemUseCase($margemQueue);
-        $atualizarMargemUseCase->handle($data);
+        $atualizarMargemUseCase->handle($input);
         return response()->json([
 			'status' => 'Sucesso',
 			'message' => 'Margem atualizada com sucesso.'

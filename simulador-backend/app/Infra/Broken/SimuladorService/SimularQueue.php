@@ -12,7 +12,7 @@ class SimularQueue implements Queue
     protected $channel;
     protected $exchange = 'credito';
     protected $queueCalcular = 'emprestimoConsignado';
-    protected $routingKeyCalcular = 'simulacao.emprestimo.consignado';
+    protected $routingKeyCalcular = 'emprestimo.consignado.simulado';
     
     public function __construct()
     {

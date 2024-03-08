@@ -13,7 +13,7 @@ class AtualizaMargemQueue implements Queue
     protected $channel;
     protected $exchange = 'credito';
     protected $queue = 'margem_cooperado';
-    protected $routingKey = 'enteconsignante.atualiza.margem';
+    protected $routingKey = 'emprestimo.consignado.margem.atualizada';
     
     public function __construct()
     {

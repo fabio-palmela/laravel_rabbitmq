@@ -8,7 +8,7 @@ class EmprestimoConsignado extends Model
 {
     protected $connection = 'simulador';
 
-    protected $table = 'emprestimo_consignado';
+    protected $table = 'simulacao_consignado';
 
     protected $fillable = [
         'cpf_cooperado',

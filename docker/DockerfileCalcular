@@ -1,15 +1,5 @@
 FROM php:8.2-fpm
 
-# Instale a extensão de sockets
-# RUN apt-get update && \
-#     apt-get install -y \
-#     libzip-dev \
-#     unzip && \
-#     libssl-dev \
-#     libcurl4-openssl-dev && \
-#     docker-php-ext-install sockets zip curl
-
-# RUN docker-php-ext-install ftp
 ENV DOCKERIZE_VERSION v0.6.1
 
 RUN apt-get update && \
@@ -40,9 +30,9 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 RUN php -r "unlink('composer-setup.php');"
 
-COPY ./analise_risco /var/www/html/analise_risco
+COPY ./simulador-backend /var/www/html/simulador-backend
 
-WORKDIR /var/www/html/analise_risco
+WORKDIR /var/www/html/simulador-backend
 
 COPY . /var/www/html
 
