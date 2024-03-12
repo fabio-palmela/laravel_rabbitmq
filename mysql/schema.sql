@@ -55,9 +55,12 @@ CREATE TABLE `simulacao_consignado` (
 
 CREATE TABLE `parcelas` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `cpf_cooperado` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mes` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cnpj_ente_consignante` varchar(14) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `valor_credito` double(8,2) NOT NULL,
+  `prestacao_mensal` double(8,2) NOT NULL,
+  `juros_mensais` double(8,2) NOT NULL,
+  `amortizacao` double(8,2) NOT NULL,
+  `saldo_devedor` double(8,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `simulacaoId` bigint unsigned NOT NULL,
@@ -75,3 +78,12 @@ SELECT sc.*, p.valor_credito AS valor
   FROM consignado.simulacao_consignado sc 
   LEFT JOIN consignado.parcelas p
     ON sc.id = p.simulacaoId;
+
+
+margem_cooperado
+cpf_cooperado
+taxa_juros
+prazo
+valor_credito
+mail_ente_consignante
+mail_cooperado

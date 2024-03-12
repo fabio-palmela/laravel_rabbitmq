@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Infra\Broken\NotificaEnteService;
+namespace App\Infra\Broken\NotificaCooperadoService;
 
 use App\Infra\Broken\Queue;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
-class EmailEnteConsignanteConsumer implements Queue
+class EmailCooperadoConsumer implements Queue
 {
     protected $connection;
     protected $channel;
     protected $exchange_consumer = 'credito';
-    protected $queue_consumer = 'emprestimoConsignadoEnte';
+    protected $queue_consumer = 'notificar_cooperado';
     // protected $routingKey_consumer = 'emprestimo.consignado.#';
-    protected $routingKey_consumer = 'emprestimo.consignado.simulado';
+    protected $routingKey_consumer = 'simulacao.emprestimo.consignado.calculado';
     
     public function __construct()
     {

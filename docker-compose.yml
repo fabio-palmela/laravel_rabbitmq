@@ -84,6 +84,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: simulador
+    command: --bind-address=0.0.0.0
     container_name: mysql
     networks:
       - internal

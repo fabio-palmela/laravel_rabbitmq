@@ -12,9 +12,17 @@ class CalcularSimulacaoUseCase
     }
 
     public function calcular($data){
-        $valor_credito = ($data->margem_cooperado > $data->valor_credito) ? $data->margem_cooperado : $data->valor_credito;
+        if (isset($data->margem_cooperado)){
+            $valor_credito = ($data->margem_cooperado > $data->valor_credito) ? $data->margem_cooperado : $data->valor_credito;
+        } else {
+            $valor_credito = $data->valor_credito;
+        }
         $prestacoes = $this->calcularPrestacoes($valor_credito, $data->taxa_juros, $data->prazo);
-        $msg = json_encode($prestacoes);
+        $data_msg = [
+            'data' => $data,
+            'prestacoes' => $prestacoes
+        ];
+        $msg = json_encode($data_msg);
         $this->queue->publish($msg);
         echo "Simulação no valor total de R$ {$valor_credito} processada.\n";
     }

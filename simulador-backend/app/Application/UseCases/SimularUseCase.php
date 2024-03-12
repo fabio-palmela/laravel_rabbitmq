@@ -15,7 +15,8 @@ class SimularUseCase
     }
     
     public function simular($data){
-        $this->emprestimoRepository->salvar($data);
+        $simulacaoId = $this->emprestimoRepository->salvar($data);
+        $data['simulacaoId'] = $simulacaoId;
         $msg = json_encode($data);
         $this->queue->publish($msg);
     }
