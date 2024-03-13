@@ -3,10 +3,7 @@
 namespace App\Presentation\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Infra\Broken\SimularQueue;
-use App\Infra\Broken\AtualizaMargemQueue;
-use App\Application\UseCases\SimularUseCase;
-use Symfony\Component\HttpFoundation\Response;
+use App\Infra\Broken\SimuladorService\AtualizaMargemQueue;
 use App\Presentation\Http\Controllers\Controller;
 use App\Application\UseCases\AtualizarMargemUseCase;
 use App\Infra\Repositories\EmprestimoRepositoryEloquent;
@@ -20,7 +17,6 @@ class MargemCooperadoController extends Controller
 
     public function atualizar(Request $request){
         try{
-
             $input = $request->input();
             $emprestimoRepository = new EmprestimoRepositoryEloquent();
             $margemQueue = new AtualizaMargemQueue();

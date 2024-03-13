@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Infra\Broken\CalcularEmprestimoService;
+namespace App\Infra\Broken\SimuladorService;
 
 use App\Infra\Broken\Queue;
+use Exception;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
-class EmailEnteConsignanteQueue implements Queue
+class AtualizaMargemQueue implements Queue
 {
     protected $connection;
     protected $channel;
-    protected $exchange_producer = 'credito';
-    protected $queue_producer = 'notificaEnteConsignante';
-    protected $routingKey_producer = 'notificar.enteconsignante.mail';
+    protected $exchange = 'credito';
+    // protected $queue = 'margem_cooperado';
+    protected $routingKey = 'emprestimo.consignado.margem.atualizada';
     
     public function __construct()
     {
@@ -30,25 +31,21 @@ class EmailEnteConsignanteQueue implements Queue
         
         $this->channel = $this->connection->channel();
 
-        $this->channel->exchange_declare($this->exchange_producer, 'topic', false, true, false);
-        $this->channel->queue_declare($this->queue_producer, false, true, false, false);
-        $this->channel->queue_bind($this->queue_producer, $this->exchange_producer, $this->routingKey_producer);
+        $this->channel->exchange_declare($this->exchange, 'topic', false, true, false);
+        // $this->channel->queue_declare($this->queue, false, true, false, false);
+        // $this->channel->queue_bind($this->queue, $this->exchange, $this->routingKey);
     }
 
     public function publish($message)
     {
         $msg = new AMQPMessage($message);
 
-        $this->channel->basic_publish($msg, $this->exchange_producer, $this->routingKey_producer);
+        $this->channel->basic_publish($msg, $this->exchange, $this->routingKey);
     }
 
-    public function on($callback)
+    public function on($callback = null)
     {
-        // $this->channel->basic_consume($this->queue, '', false, true, false, false, $callback);
-
-        // while ($this->channel->is_consuming()) {
-        //     $this->channel->wait();
-        // }
+       
     }
 
     public function acknowledge($msg)

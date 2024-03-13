@@ -11,7 +11,7 @@ class SimularQueue implements Queue
     protected $connection;
     protected $channel;
     protected $exchange = 'credito';
-    protected $queueCalcular = 'emprestimoConsignado';
+    // protected $queueCalcular = 'emprestimoConsignado';
     protected $routingKeyCalcular = 'emprestimo.consignado.simulado';
     
     public function __construct()
@@ -27,21 +27,12 @@ class SimularQueue implements Queue
             config('rabbitmq.password'),
             config('rabbitmq.vhost')
         );
-        // $this->connection = new AMQPStreamConnection(
-        //     env('RABBITMQ_HOST'),
-        //     env('RABBITMQ_PORT'),
-        //     env('RABBITMQ_LOGIN'),
-        //     env('RABBITMQ_PASSWORD'),
-        //     env('RABBITMQ_VHOST')
-        // );
         
         $this->channel = $this->connection->channel();
 
         $this->channel->exchange_declare($this->exchange, 'topic', false, true, false);
-        // $this->channel->queue_declare($this->queueEmail, false, true, false, false);
-        // $this->channel->queue_bind($this->queueEmail, $this->exchange, $this->routingKeyEmail);
-        $this->channel->queue_declare($this->queueCalcular, false, true, false, false);
-        $this->channel->queue_bind($this->queueCalcular, $this->exchange, $this->routingKeyCalcular);
+        // $this->channel->queue_declare($this->queueCalcular, false, true, false, false);
+        // $this->channel->queue_bind($this->queueCalcular, $this->exchange, $this->routingKeyCalcular);
     }
 
     public function publish($message)
@@ -53,11 +44,7 @@ class SimularQueue implements Queue
 
     public function on($callback)
     {
-        // $this->channel->basic_consume($this->queue, '', false, true, false, false, $callback);
-
-        // while ($this->channel->is_consuming()) {
-        //     $this->channel->wait();
-        // }
+        
     }
 
     public function acknowledge($msg)
