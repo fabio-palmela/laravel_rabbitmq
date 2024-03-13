@@ -26,8 +26,10 @@ class Mailtrap implements Mail{
         $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use PHPMailer::ENCRYPTION_SMTPS se necessário
         $this->mail->Host = 'sandbox.smtp.mailtrap.io';
         $this->mail->Port = '2525';
-        $this->mail->Username = 'e0e8bba51c8caa';
-        $this->mail->Password = '9f9bfd07c07bf0';
+        $this->mail->Username = 'efb16cf2b8a17b';
+        $this->mail->Password = '74b482e24394e3';
+
+
         $this->from();
     }
 

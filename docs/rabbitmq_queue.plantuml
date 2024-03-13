@@ -14,21 +14,21 @@ SHOW_PERSON_OUTLINE()
 LAYOUT_LEFT_RIGHT()
 
 System_Boundary(simulador_consignado, "Simulador Consignado") {
-  System(simulador_backend, "Simulador Service", "Laravel", "Fornece frontend ao sistema.")
-  Container(consumer_confirmacao, "Serviço de confirmação", "Laravel", "Backend da aplicação.", $tags="services")
+  System(simulador_backend, "Simulador Service", "Laravel", "API do simulador.")
+  Container(consumer_confirmacao, "Serviço de confirmação", "Laravel", "Recebe uma mensagem de confirmação com as parcelas cálculadas.", $tags="services")
 }
 
 System_Boundary(rabbitmq, "Sistema de Filas") {
-  System(exchange, "Exchange", "Crédito", "Router", $tags="exchange")
+  System(exchange, "Exchange", "Topic", "Router", $tags="exchange")
 
-  ContainerQueue_Ext(queue_calcular_simulacao, "Calcula parcelas do emprestimo", "ampq", "Calcula parcelas do emprestimo", $tags="filas")
-  ContainerQueue_Ext(queue_notifica_cooperado, "Notifica o cooperado com parcelas", "ampq", "Notifica o cooperado com parcelas", $tags="filas")
-  ContainerQueue_Ext(queue_notifica_ente, "Notifica o Ente consignante", "ampq", "Notifica o Ente consignante", $tags="filas")
-  ContainerQueue_Ext(queue_consignado_calculado, "Confirma cálculo consignado", "ampq", "Confirma cálculo consignado", $tags="filas")
+  ContainerQueue_Ext(queue_calcular_simulacao, "emprestimoConsignado", "ampq", "Fila", $tags="filas")
+  ContainerQueue_Ext(queue_notifica_cooperado, "notifica_cooperado", "ampq", "Fila", $tags="filas")
+  ContainerQueue_Ext(queue_notifica_ente, "notificaEnteConsignante", "ampq", "Fila", $tags="filas")
+  ContainerQueue_Ext(queue_consignado_calculado, "consignadoCalculado", "ampq", "Fila", $tags="filas")
 }
-Container(consumer_calcular, "Serviço de cálculo das parcelas", "Laravel", "Backend da aplicação.", $tags="services")
-Container(consumer_notifica_coop, "Serviço de notificação de cooperados", "Laravel", "Backend da aplicação.", $tags="services")
-Container(consumer_notifica_ente, "Serviço de notificação do Ente Consignante", "Laravel", "Backend da aplicação.", $tags="services")
+Container(consumer_calcular, "Serviço de cálculo das parcelas", "php", "Realiza o cálculo da simulação.", $tags="services")
+Container(consumer_notifica_coop, "Serviço de notificação de cooperados", "php", "Notifica cooperado com parcelas da simulação.", $tags="services")
+Container(consumer_notifica_ente, "Serviço de notificação do Ente Consignante", "php", "Notifica ente consignante para atualização da margem", $tags="services")
 
 
 Rel_D(simulador_backend, exchange, "emprestimo.consignado.simulado")

@@ -23,6 +23,7 @@ class ConfirmaSimulacaoUseCase
             $this->parcelasRepository->salvar($data, $simulacaoId);
         } else {
             $this->parcelasRepository->salvar($data, $data->data->simulacaoId);
+            // var_dump($data->data->simulacaoId); die;
         }
         echo "Confirmação do cálculo da simulação no valor de R$ {$data->data->valor_credito}.\n";
     }
