@@ -10,8 +10,7 @@ class ParcelasRepositoryEloquent implements ParcelasInterface{
 
     }
 
-    public function salvar($input){
-        $simulacaoId = $input->data->simulacaoId;
+    public function salvar($input, $simulacaoId){
         $prestacoes = $input->prestacoes;
         foreach($prestacoes as $prestacao){
             $parcelas = new Parcelas();

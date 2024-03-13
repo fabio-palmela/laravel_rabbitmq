@@ -48,6 +48,10 @@ CREATE TABLE `simulacao_consignado` (
   `cpf_cooperado` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cnpj_ente_consignante` varchar(14) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `valor_credito` double(8,2) NOT NULL,
+  `taxa_juros` double(8,2) NOT NULL,
+  `prazo` double(8,2) NOT NULL,
+  `mail_ente_consignante` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mail_cooperado` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)

@@ -4,8 +4,9 @@ namespace App\Presentation\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Application\UseCases\ConfirmaSimulacaoUseCase;
-use App\Infra\Broken\SimuladorService\ConsignadoCalculadoQueue;
 use App\Infra\Repositories\ParcelasRepositoryEloquent;
+use App\Infra\Repositories\EmprestimoRepositoryEloquent;
+use App\Infra\Broken\SimuladorService\ConsignadoCalculadoQueue;
 
 class ConfirmaSimulacaoConsignadoCommand extends Command
 {
@@ -33,8 +34,10 @@ class ConfirmaSimulacaoConsignadoCommand extends Command
             $consignadoCalculadoQueue = new ConsignadoCalculadoQueue();
             $callback = function ($msg) use ($consignadoCalculadoQueue){
                 $data = json_decode($msg->body);
-                $parcelasRepository = new ParcelasRepositoryEloquent();
-                $confirmaSimulacaoUseCase = new ConfirmaSimulacaoUseCase($parcelasRepository);
+                $confirmaSimulacaoUseCase = new ConfirmaSimulacaoUseCase(
+                    new ParcelasRepositoryEloquent(),
+                    new EmprestimoRepositoryEloquent()
+                );
                 $confirmaSimulacaoUseCase->handle($data);
                 $consignadoCalculadoQueue->acknowledge($msg);
             };

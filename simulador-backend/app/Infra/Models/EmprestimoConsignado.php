@@ -3,7 +3,7 @@
 namespace App\Infra\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Casts\Attribute;
 class EmprestimoConsignado extends Model
 {
     protected $connection = 'simulador';
@@ -19,4 +19,5 @@ class EmprestimoConsignado extends Model
     protected $casts = [
         'valor_credito' => 'float',
     ];
+
 }

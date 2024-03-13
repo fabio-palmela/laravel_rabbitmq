@@ -12,8 +12,10 @@ class CalcularSimulacaoUseCase
     }
 
     public function calcular($data){
+        // var_dump($data);die;
         if (isset($data->margem_cooperado)){
             $valor_credito = ($data->margem_cooperado > $data->valor_credito) ? $data->margem_cooperado : $data->valor_credito;
+            $data->valor_credito = $valor_credito;
         } else {
             $valor_credito = $data->valor_credito;
         }

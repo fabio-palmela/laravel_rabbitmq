@@ -1,0 +1,46 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+AddElementTag("filas", $fontColor="black", $bgColor="#fdf1bc")
+AddElementTag("services", $fontColor="black", $bgColor="#63ffc9")
+AddElementTag("exchange", $fontColor="black", $bgColor="#ffc2c2")
+
+' SET_SKETCH_STYLE($bgColor="lightblue", $fontColor="darkblue", $warningColor="darkred", $footerWarning="Sketch", $footerText="Created for discussion")
+
+
+HIDE_STEREOTYPE()
+
+SHOW_PERSON_OUTLINE()
+LAYOUT_LEFT_RIGHT()
+
+System_Boundary(simulador_consignado, "Simulador Consignado") {
+  System(simulador_backend, "Simulador Service", "Laravel", "Fornece frontend ao sistema.")
+  Container(consumer_confirmacao, "Serviço de confirmação", "Laravel", "Backend da aplicação.", $tags="services")
+}
+
+System_Boundary(rabbitmq, "Sistema de Filas") {
+  System(exchange, "Exchange", "Crédito", "Router", $tags="exchange")
+
+  ContainerQueue_Ext(queue_calcular_simulacao, "Calcula parcelas do emprestimo", "ampq", "Calcula parcelas do emprestimo", $tags="filas")
+  ContainerQueue_Ext(queue_notifica_cooperado, "Notifica o cooperado com parcelas", "ampq", "Notifica o cooperado com parcelas", $tags="filas")
+  ContainerQueue_Ext(queue_notifica_ente, "Notifica o Ente consignante", "ampq", "Notifica o Ente consignante", $tags="filas")
+  ContainerQueue_Ext(queue_consignado_calculado, "Confirma cálculo consignado", "ampq", "Confirma cálculo consignado", $tags="filas")
+}
+Container(consumer_calcular, "Serviço de cálculo das parcelas", "Laravel", "Backend da aplicação.", $tags="services")
+Container(consumer_notifica_coop, "Serviço de notificação de cooperados", "Laravel", "Backend da aplicação.", $tags="services")
+Container(consumer_notifica_ente, "Serviço de notificação do Ente Consignante", "Laravel", "Backend da aplicação.", $tags="services")
+
+
+Rel_D(simulador_backend, exchange, "emprestimo.consignado.simulado")
+Rel_D(simulador_backend, exchange, "emprestimo.consignado.margem.atualizada")
+Rel_D(exchange, queue_consignado_calculado, "simulacao.emprestimo.consignado.calculado")
+Rel_D(queue_consignado_calculado, consumer_confirmacao, "")
+Rel_D(exchange, queue_notifica_cooperado, "simulacao.emprestimo.consignado.calculado")
+Rel_D(queue_notifica_cooperado, consumer_notifica_coop, "")
+Rel_D(exchange, queue_notifica_ente, "emprestimo.consignado.simulado")
+Rel_D(queue_notifica_ente, consumer_notifica_ente, "")
+Rel_D(exchange, queue_calcular_simulacao, "emprestimo.consignado.#")
+Rel_D(queue_calcular_simulacao, consumer_calcular, "")
+Rel_U(consumer_calcular, exchange, "simulacao.emprestimo.consignado.calculado")
+
+@enduml
